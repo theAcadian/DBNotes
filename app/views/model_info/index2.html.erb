@@ -1,0 +1,71 @@
+<div class="row"> &nbsp;</div>
+<div class="row">
+	<div class="span9">
+		<form class="form-search text-right">
+	  		<input type="text" class="input-large search-query">
+	  		<button type="submit" class="btn">Search</button>
+	  		
+		</form>
+	</div>
+	<div class="span3 text-right">	
+		 <img width="28" height="28" alt="" src="http://l.yimg.com/dh/ap/social/profile/profile_b32.png"> Sai Ponduru
+	</div>
+
+</div>
+<div class="row">
+	
+	<div class="span3 accordion" id="accordion1">
+		<% @models.each do |m| %>
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				<a href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1"><%= m %>
+				</a>
+			</div>
+			<div id="collapse<%= m%>" class="accordion-body collapse">
+				<div class="accordion-inner">
+					<ul>
+					<%	m.column_names.each do |c| %>  
+						<% unless ['id', 'created_at', 'updated_at'].include? c %>
+							<li><%= link_to c, table_column_path(m,c) %></li>
+						<% end %>
+					<% end %>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<% end %>
+	</div>
+	<div class="span9">
+		<% unless @table_name.blank? %>
+		<div class="row">
+			<ul class="breadcrumb">
+			  <li><%= link_to "HOME", :root %><span class="divider">/</span></li>
+			  <li><a href="#"><%= @table_name %></a> <span class="divider">/</span></li>
+			  <li class="active"><%= @column_name %></li>
+			</ul>
+		</div>
+		<% end %>
+		<div class="row">
+			<% if @notes.blank?  %>
+				<% if !@table_name.blank? && !@column_name.blank? %>
+				<p> No notes present for: <b><%= @table_name + " - "  + @column_name %> </b>
+				<% end %>
+			<% else %>
+				<% @notes.each do |n| %>
+				<div class="well">
+					<p><%= n.note_text %></p>
+					<p class="text-right"><small> - <%= n.author %>, &nbsp;<%= n.updated_at.to_formatted_s(:long) %></small></p>
+						
+					<% unless n.comments.blank? %>
+						<% n.comments.each do |c| %>
+						<hr>
+						<p> <small><%= c.comment_text %> &nbsp;&nbsp;- <%= c.author %>, &nbsp;<%= c.updated_at.to_formatted_s(:long) %></small></p>
+						<% end %>
+					<% end %>
+					</div>
+				<% end %>
+			<% end %>
+	</div>
+	</div>
+
+</div>

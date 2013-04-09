@@ -1,4 +1,19 @@
 DBNotes::Application.routes.draw do
+
+#match 'modeldata', to: "ModelInfo#index"
+root  to: "ModelInfo#index2"
+
+# If user clicks on Table-name, display all notes of all columns (for now)
+# This will probably change to just display some info about the Table
+match 'tables/:table', to: "ModelInfo#show_notes_for_table", as: "table"
+
+#If user clicks on a Column-name, display all notes for that column
+match 'tables/:table/columns/:column', to: "ModelInfo#show_notes_for_column", as: "table_column"
+
+resources :notes do
+  resources :comments
+end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

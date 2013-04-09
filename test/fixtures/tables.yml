@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  column_name: MyString
+  column_datatype: MyString
+
+two:
+  column_name: MyString
+  column_datatype: MyString

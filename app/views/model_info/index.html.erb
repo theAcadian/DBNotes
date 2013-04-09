@@ -1,0 +1,12 @@
+<% @models.each do |m| %>
+	<b><%= m %></b> <br>
+	<ul>
+	<%	m.column_names.each do |c| %>  #iterate over column_names in a model
+		<% unless ['id', 'created_at', 'updated_at'].include? c %> 
+			<li> <%= c  %> </li>
+		<% end %>
+	<% end %>
+	</ul>
+<% end %>
+<br>
+
