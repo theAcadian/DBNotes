@@ -1,3 +1,4 @@
+
 <div class="row"> &nbsp;</div>
 <div class="row">
 	<div class="span9">
@@ -12,7 +13,7 @@
 	</div>
 
 </div>
-<div class="row">
+<div class="row" >
 	
 	<div class="span3 accordion" id="accordion1">
 		<% @models.each do |m| %>
@@ -26,7 +27,7 @@
 					<ul>
 					<%	m.column_names.each do |c| %>  
 						<% unless ['id', 'created_at', 'updated_at'].include? c %>
-							<li><%= link_to c, table_column_path(m,c) %></li>
+							<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');"><%= c %></a></li>
 						<% end %>
 					<% end %>
 					</ul>
@@ -36,36 +37,65 @@
 		<% end %>
 	</div>
 	<div class="span9">
-		<% unless @table_name.blank? %>
+		
 		<div class="row">
 			<ul class="breadcrumb">
-			  <li><%= link_to "HOME", :root %><span class="divider">/</span></li>
-			  <li><a href="#"><%= @table_name %></a> <span class="divider">/</span></li>
-			  <li class="active"><%= @column_name %></li>
+			  <li><%= link_to "HOME", :root %></li>
+			  <li id="table_name"> </li>
+			  <li id="column_name" class="active"></li>
 			</ul>
 		</div>
-		<% end %>
-		<div class="row">
-			<% if @notes.blank?  %>
-				<% if !@table_name.blank? && !@column_name.blank? %>
-				<p> No notes present for: <b><%= @table_name + " - "  + @column_name %> </b>
-				<% end %>
-			<% else %>
-				<% @notes.each do |n| %>
-				<div class="well">
-					<p><%= n.note_text %></p>
-					<p class="text-right"><small> - <%= n.author %>, &nbsp;<%= n.updated_at.to_formatted_s(:long) %></small></p>
-						
-					<% unless n.comments.blank? %>
-						<% n.comments.each do |c| %>
-						<hr>
-						<p> <small><%= c.comment_text %> &nbsp;&nbsp;- <%= c.author %>, &nbsp;<%= c.updated_at.to_formatted_s(:long) %></small></p>
-						<% end %>
-					<% end %>
-					</div>
-				<% end %>
-			<% end %>
-	</div>
+		
+		<div class="row" id="middle_column">
+			
+		</div>
 	</div>
 
 </div>
+
+<script type="text/javascript">
+	if (<%= @table_name.blank? %>) 
+		jQuery('.breadcrumb').hide();
+</script>
+
+
+<script type="text/javascript">
+
+	function update_breadcrumbs(model_name, column_name) {
+		jQuery('.breadcrumb').show();
+		jQuery('#table_name').html('<span class="divider">></span>' + model_name);
+		jQuery('#column_name').html('<span class="divider">></span>' + column_name);
+	}
+
+	function show_notes_for(model_name, column_name) {
+		// 1. Place Ajax call 
+		// 2. Callback will populate #middle_column
+
+		jQuery.getJSON("/tables/" + model_name + "/columns/" + column_name + ".json", show_notes_for_CB);
+	}
+
+	function show_notes_for_CB(response) {
+		if (response.length == 0) 				// if no Notes are present in DB, show message
+			jQuery('#middle_column').html('<p><b> No notes present </b></p>');
+		else {
+			jQuery('#middle_column').html('');	// empty out the Div (i.e. initialize to empty)
+			jQuery(response).each(function(i, ele) {
+				html = "";
+				html = html + '<div class="well">';
+				html = html + 	'<p>' + ele.note_text + '</p>' 
+				html = html +	'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>';
+							
+				if (ele.comments.length != 0) {
+					jQuery(ele.comments).each( function(i, c_ele) {
+						html = html + '<hr>' + 
+						'<p> <small>' + c_ele.comment_text + ' &nbsp;&nbsp;- ' + c_ele.author +', &nbsp;' + c_ele.updated_at + '</small></p>';
+					});
+				}
+				html = html + '</div>';
+				jQuery('#middle_column').append(html);
+			});
+
+		}
+	}
+	
+</script>

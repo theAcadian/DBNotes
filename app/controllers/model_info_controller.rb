@@ -36,7 +36,11 @@ class ModelInfoController < ApplicationController
 		@column_name = params[:column]
 		@notes = Note.where(:table_name => @table_name, :column_name => @column_name)
 
-		render "index2"
+
+		respond_to do |format|
+			format.json { render :json => @notes.to_json(:include => :comments) }
+			format.html { render "index2" }
+		end
 	end
 
 end
