@@ -12,8 +12,6 @@ class ModelInfoController < ApplicationController
 		#end
 
 		@models = ActiveRecord::Base.descendants
-
-
 		
 	end
 
@@ -43,4 +41,26 @@ class ModelInfoController < ApplicationController
 		end
 	end
 
+	def add_note
+		table_name = params[:table_name]
+		column_name = params[:column_name]
+		author = params[:author]
+		note_text = params[:note_text]
+		@n = Note.create :table_name => table_name, :column_name => column_name, :author => author, :note_text => note_text
+		respond_to do |format|
+			format.any(:xml, :html, :json) { render :json => @n.to_json }
+		end
+	end
+
+	def add_comment
+		#table_name = params[:table_name]
+		#column_name = params[:column_name]
+		author = params[:author]
+		comment_text = params[:comment_text]
+		note_id = params[:note_id]
+		@c = Comment.create :author => author, :comment_text => comment_text, :note_id => note_id
+		respond_to do |format|
+			format.any(:xml, :html, :json) { render :json => @c.to_json}
+		end
+	end
 end

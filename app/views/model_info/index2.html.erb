@@ -1,62 +1,70 @@
+<div class="container">
 
-<div class="row"> &nbsp;</div>
-<div class="row">
-	<div class="span9">
-		<form class="form-search text-right">
-	  		<input type="text" class="input-large search-query">
-	  		<button type="submit" class="btn">Search</button>
-	  		
-		</form>
-	</div>
-	<div class="span3 text-right">	
-		 <img width="28" height="28" alt="" src="http://l.yimg.com/dh/ap/social/profile/profile_b32.png"> Sai Ponduru
-	</div>
+	<div class="row"> &nbsp;</div>
+	<div class="row">
+		<div class="span9">
+			<form class="form-search text-right">
+		  		<input type="text" class="input-xxlarge search-query">
+		  		<button type="submit" class="btn">Search</button>
+		  		
+			</form>
+		</div>
+		<div class="span3 text-right">	
+			 <img width="28" height="28" alt="" src="http://l.yimg.com/dh/ap/social/profile/profile_b32.png"> Sai Ponduru
+		</div>
 
-</div>
-<div class="row" >
-	
-	<div class="span3 accordion" id="accordion1">
-		<% @models.each do |m| %>
-		<div class="accordion-group">
-			<div class="accordion-heading">
-				<a href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1"><%= m %>
-				</a>
-			</div>
-			<div id="collapse<%= m%>" class="accordion-body collapse">
-				<div class="accordion-inner">
-					<ul>
-					<%	m.column_names.each do |c| %>  
-						<% unless ['id', 'created_at', 'updated_at'].include? c %>
-							<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');"><%= c %></a></li>
+	</div>
+	<div class="row" >
+		
+		<div class="span3 accordion" id="accordion1">
+			<% @models.each do |m| %>
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<a href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1"></i><%= m %><span class="badge badge-warning pull-right">2</span></a>
+					
+				</div>
+				<div id="collapse<%= m%>" class="accordion-body collapse">
+					<div class="accordion-inner">
+						<ul>
+						<%	m.column_names.each do |c| %>  
+							<% unless ['id', 'created_at', 'updated_at'].include? c %>
+								<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');"><%= c %></a> <span class="badge badge-info pull-right">2</span></li>
+							<% end %>
 						<% end %>
-					<% end %>
-					</ul>
+						</ul>
+					</div>
 				</div>
 			</div>
+			<% end %>
 		</div>
-		<% end %>
-	</div>
-	<div class="span9">
-		
-		<div class="row">
-			<ul class="breadcrumb">
-			  <li><%= link_to "HOME", :root %></li>
-			  <li id="table_name"> </li>
-			  <li id="column_name" class="active"></li>
-			</ul>
-		</div>
-		
-		<div class="row" id="middle_column">
+		<div class="span9">
 			
+			<div class="row">
+				<ul class="breadcrumb">
+				  <li><%= link_to "HOME", :root %></li>
+				  <li id="table_name"> </li>
+				  <li id="column_name" class="active"></li>
+				</ul>
+			</div>
+			
+			<div class="row" id="middle_column">
+				
+			</div>
+
+			<div class="row" id="AddNote" class="span9">
+				<span class="label label-info pull-right"> Add New Note </div>
+				<textarea name="newnote" id="newnote" rows="10" class="span9">(HTMLEditor goes here . For now it is a textarea.)</textarea><br>
+				<button class="btn btn-primary" type="button" onclick="javascript:addNote();">Add Note</button>
+			</div>
+
+
 		</div>
+
 	</div>
-
+	<div class="row">
+		<br><br> <hr>Footer goes here <hr>
+	</div>
 </div>
-
-<script type="text/javascript">
-	if (<%= @table_name.blank? %>) 
-		jQuery('.breadcrumb').hide();
-</script>
 
 
 <script type="text/javascript">
@@ -72,30 +80,118 @@
 		// 2. Callback will populate #middle_column
 
 		jQuery.getJSON("/tables/" + model_name + "/columns/" + column_name + ".json", show_notes_for_CB);
+
+
+		function show_notes_for_CB (response) {
+			if (response.length == 0) 				// if no Notes are present in DB, show message
+				jQuery('#middle_column').html('<p><b> No notes present </b></p>');
+			else {
+				jQuery('#middle_column').html('');	// empty out the Div (i.e. initialize to empty)
+				jQuery(response).each(function(i, ele) {
+					var html = "";
+					html = html + '<div class="well">';
+					
+					html = html + 	'<p>' + ele.note_text + '</p>' ; // Use <p> element to show Note's text
+					html = html +	'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>'; // Use <p> element to show Note's author and date
+								
+					// If Note has Comments, create <p> element for each Comment, and append them
+					if (ele.comments.length != 0) {
+						jQuery(ele.comments).each( function(i, c_ele) {
+							html = html + '<hr>' ; 
+							html = html + '<p> <small>' + c_ele.comment_text + ' &nbsp;&nbsp;- ' + c_ele.author +', &nbsp;' + c_ele.updated_at + '</small></p>';
+						});
+					}
+
+					html = html + '<hr><a href="#" onclick="show_AddCommentBox('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
+					html = html + '<div id="newcommentdiv' + ele.id +'" style="display:none"><textarea rows="5" class="span8"></textarea> <br> <button onclick="addComment(' + ele.id + ')" class="btn btn-primary">Add Comment</button>';
+					html = html + 			'&nbsp; &nbsp; <button onclick="hide_addCommentDiv(' + ele.id + ');" class="btn btn-danger">Cancel</button>' ;
+					html = html + '</div>' ; // Add a Div that contains TextArea & Button to add a new comment
+
+					html = html + '</div>';
+					jQuery('#middle_column').append(html);
+				});
+
+			}
+		}
+
 	}
 
-	function show_notes_for_CB(response) {
-		if (response.length == 0) 				// if no Notes are present in DB, show message
-			jQuery('#middle_column').html('<p><b> No notes present </b></p>');
-		else {
-			jQuery('#middle_column').html('');	// empty out the Div (i.e. initialize to empty)
-			jQuery(response).each(function(i, ele) {
-				html = "";
-				html = html + '<div class="well">';
-				html = html + 	'<p>' + ele.note_text + '</p>' 
-				html = html +	'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>';
-							
-				if (ele.comments.length != 0) {
-					jQuery(ele.comments).each( function(i, c_ele) {
-						html = html + '<hr>' + 
-						'<p> <small>' + c_ele.comment_text + ' &nbsp;&nbsp;- ' + c_ele.author +', &nbsp;' + c_ele.updated_at + '</small></p>';
-					});
-				}
-				html = html + '</div>';
-				jQuery('#middle_column').append(html);
-			});
+	
+	function addNote() {
 
+		var table_name = $('li#table_name').text().substr(1) ;	// Get TableName (strip off the last character which is > )
+		var column_name = $('li#column_name').text().substr(1) ;
+		var author = 'Sai Ponduru';
+		var note_text = $('#newnote').val();
+		jQuery.getJSON('/add_note?table_name=' + table_name + '&column_name=' + column_name + '&author=' + author + '&note_text=' + note_text, addNote_CB);
+
+		function addNote_CB (response) {
+			var ele = response;
+			//var ele = {"author":"Sai Ponduru","column_name":"note_id","created_at":"2013-04-11T04:55:40Z","id":37,"note_text":"s","table_name":"Comment","updated_at":"2013-04-11T04:55:40Z"};
+			var html = "";
+			html = html + '<div class="well">';
+			html = html + 		'<p>' + ele.note_text + '</p>' ;
+			html = html +		'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>';
+			html = html + 		'<hr><a href="#" onclick="show_AddCommentBox('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
+			html = html + 		'<div id="newcommentdiv' + ele.id +'" style="display:none">';
+			html = html + 			'<textarea rows="5" class="span8"></textarea> <br>' ;
+			html = html + 			'<button onclick="addComment(' + ele.id + ')" class="btn btn-primary">Add Comment</button>' ;
+			html = html + 			'&nbsp; &nbsp; <button onclick="hide_addCommentDiv(' + ele.id + ');" class="btn btn-danger">Cancel</button>' ;
+			html = html + 		'</div>' ; // Add a Div that contains TextArea & Button to add a new comment
+					
+			html = html + '</div>';
+
+			jQuery('#middle_column').append(html);
+			$('#newnote').val('');
 		}
+
+
+		
+	}
+
+
+	function show_AddCommentBox( note_id) {
+		
+		//$(link_element).parent().append('<div id="newcomment_div><textarea id="newcomment">This is a new comment</textarea><br><button onclick="addComment(' + link_element + ',' + note_id + ')">Add Comment</button></div>');
+		jQuery('#newcommentdiv' + note_id).show();
+
+	}
+
+	function hide_addCommentDiv(note_id){
+		jQuery('#newcommentdiv' + note_id).hide();		
+	}
+
+
+	function addComment( note_id) {
+
+		var author = 'Sai Ponduru';
+		var comment_text = $('#newcommentdiv' + note_id + '> textarea').val();
+		jQuery.getJSON('/add_comment?author=' + author + '&note_id=' + note_id + '&comment_text=' + comment_text, addComment_CB);
+
+		function addComment_CB  (response) {
+			// response contains json data of newly added comment - we are using data received from the server (instead of taking it from the textarea element) in order to make sure that the comment got saved on the server side ;
+			var ele = response;
+			
+			// construct html for the new comment to be appended 
+			var html = "";	
+			html = html + '<p> <small>' + ele.comment_text + ' &nbsp;&nbsp;- ' + ele.author +', &nbsp;' + ele.updated_at + '</small></p>';
+			html = html + '<hr>' ;
+			
+			// append the above constructed html 
+			var last_comments_hr = $('#newcommentdiv' + note_id).parent().find('hr').last();	// find last comment's hr
+			$(html).insertAfter(last_comments_hr);	// insert new comment after the last comment's hr 
+			$('#newcommentdiv' + note_id).hide();	// hide textarea & button to add new comment
+			$('#newcommentdiv' + note_id + '>textarea').val('');	//clear textarea's contents
+		}
+
 	}
 	
+</script>
+
+<script type="text/javascript">
+	if (<%= @table_name.blank? %>) {
+		// jQuery('.breadcrumb').hide();
+		$('.accordion a')[0].click();
+		$('.accordion-inner a')[0].click();
+	}
 </script>

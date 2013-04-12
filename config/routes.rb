@@ -10,6 +10,10 @@ match 'tables/:table', to: "ModelInfo#show_notes_for_table", as: "table"
 #If user clicks on a Column-name, display all notes for that column
 match 'tables/:table/columns/:column(.format)', to: "ModelInfo#show_notes_for_column", as: "table_column"
 
+match 'add_note', to: "ModelInfo#add_note"
+
+match 'add_comment', to: "ModelInfo#add_comment"
+
 resources :notes do
   resources :comments
 end
