@@ -102,7 +102,7 @@
 						});
 					}
 
-					html = html + '<hr><a href="#" onclick="show_AddCommentBox('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
+					html = html + '<hr><a href="#" onclick="show_AddCommentDiv('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
 					html = html + '<div id="newcommentdiv' + ele.id +'" style="display:none"><textarea rows="5" class="span8"></textarea> <br> <button onclick="addComment(' + ele.id + ')" class="btn btn-primary">Add Comment</button>';
 					html = html + 			'&nbsp; &nbsp; <button onclick="hide_addCommentDiv(' + ele.id + ');" class="btn btn-danger">Cancel</button>' ;
 					html = html + '</div>' ; // Add a Div that contains TextArea & Button to add a new comment
@@ -132,7 +132,7 @@
 			html = html + '<div class="well">';
 			html = html + 		'<p>' + ele.note_text + '</p>' ;
 			html = html +		'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>';
-			html = html + 		'<hr><a href="#" onclick="show_AddCommentBox('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
+			html = html + 		'<hr><a href="#" onclick="show_AddCommentDiv('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
 			html = html + 		'<div id="newcommentdiv' + ele.id +'" style="display:none">';
 			html = html + 			'<textarea rows="5" class="span8"></textarea> <br>' ;
 			html = html + 			'<button onclick="addComment(' + ele.id + ')" class="btn btn-primary">Add Comment</button>' ;
@@ -150,7 +150,7 @@
 	}
 
 
-	function show_AddCommentBox( note_id) {
+	function show_AddCommentDiv( note_id) {
 		
 		//$(link_element).parent().append('<div id="newcomment_div><textarea id="newcomment">This is a new comment</textarea><br><button onclick="addComment(' + link_element + ',' + note_id + ')">Add Comment</button></div>');
 		jQuery('#newcommentdiv' + note_id).show();
