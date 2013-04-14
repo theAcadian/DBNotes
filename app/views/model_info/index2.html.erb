@@ -1,5 +1,9 @@
+<div class="row text-center">
+	<hr><h4>Header goes here </h4><hr>
+</div>
+	
 <div class="container">
-
+	
 	<div class="row"> &nbsp;</div>
 	<div class="row">
 		<div class="span9">
@@ -18,23 +22,25 @@
 		
 		<div class="span3 accordion" id="accordion1">
 			<% @models.each do |m| %>
-			<div class="accordion-group">
-				<div class="accordion-heading">
-					<a href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1"></i><%= m %><span class="badge badge-warning pull-right">2</span></a>
-					
-				</div>
-				<div id="collapse<%= m%>" class="accordion-body collapse">
-					<div class="accordion-inner">
-						<ul>
-						<%	m.column_names.each do |c| %>  
-							<% unless ['id', 'created_at', 'updated_at'].include? c %>
-								<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');"><%= c %></a> <span class="badge badge-info pull-right">2</span></li>
+				<% if !['Note', 'Comment'].include? m.to_s %>
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1"></i><%= m %><span class="badge badge-warning pull-right">2</span></a>
+						
+					</div>
+					<div id="collapse<%= m%>" class="accordion-body collapse">
+						<div class="accordion-inner">
+							<ul>
+							<%	m.column_names.each do |c| %>  
+								<% unless ['id', 'created_at', 'updated_at'].include? c %>
+									<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');"><%= c %></a> <span class="badge badge-info pull-right">2</span></li>
+								<% end %>
 							<% end %>
-						<% end %>
-						</ul>
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
+				<% end %>
 			<% end %>
 		</div>
 		<div class="span9">
@@ -61,8 +67,8 @@
 		</div>
 
 	</div>
-	<div class="row">
-		<br><br> <hr>Footer goes here <hr>
+	<div class="row text-center">
+		<br><br> <hr><h4>Footer goes here </h4><hr>
 	</div>
 </div>
 
