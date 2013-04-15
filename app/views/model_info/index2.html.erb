@@ -89,37 +89,40 @@
 
 
 		function show_notes_for_CB (response) {
-			if (response.length == 0) 				// if no Notes are present in DB, show message
+			if (response.length == 0)  {				// if no Notes are present in DB, show message and return
 				jQuery('#middle_column').html('<p><b> No notes present </b></p>');
-			else {
-				jQuery('#middle_column').html('');	// empty out the Div (i.e. initialize to empty)
-				jQuery(response).each(function(i, ele) {
-					var html = "";
-					html = html + '<div class="well">';
-					
-					html = html + 		'<p>' + ele.note_text + '</p>' ; // Use <p> element to show Note's text
-					html = html +		'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>'; // Use <p> element to show Note's author and date
-								
-					// If Note has Comments, create <p> element for each Comment, and append them
-					if (ele.comments.length != 0) {
-						jQuery(ele.comments).each( function(i, c_ele) {
-							html = html + '<hr>' ; 
-							html = html + '<p> <small>' + c_ele.comment_text + ' &nbsp;&nbsp;- ' + c_ele.author +', &nbsp;' + c_ele.updated_at + '</small></p>';
-						});
-					}
-
-					html = html + 			'<hr><a href="#" onclick="show_AddCommentDiv('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
-					html = html + 			'<div id="newcommentdiv' + ele.id +'" style="display:none">' ; // Add a Div that contains TextArea & Button to add a new comment
-					html = html + 				'<textarea rows="5" class="span8"></textarea>'; 
-					html = html + 				'<br>';
-					html = html + 				'<button onclick="addComment(' + ele.id + ')" class="btn btn-primary">Add Comment</button>&nbsp; &nbsp; ';
-					html = html + 				'<button onclick="hide_addCommentDiv(' + ele.id + ');" class="btn btn-danger">Cancel</button>' ;
-					html = html + 			'</div>' ; 
-					html = html + '</div>';
-					jQuery('#middle_column').append(html);
-				});
-
+				return;
 			}
+
+			
+			jQuery('#middle_column').html('');	// empty out the Div (i.e. initialize to empty)
+			jQuery(response).each(function(i, ele) {
+				var html = "";
+				html = html + '<div class="well">';
+				
+				html = html + 		'<p>' + ele.note_text + '</p>' ; // Use <p> element to show Note's text
+				html = html +		'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>'; // Use <p> element to show Note's author and date
+							
+				// If Note has Comments, create <p> element for each Comment, and append them
+				if (ele.comments.length != 0) {
+					jQuery(ele.comments).each( function(i, c_ele) {
+						html = html + '<hr>' ; 
+						html = html + '<p> <small>' + c_ele.comment_text + ' &nbsp;&nbsp;- ' + c_ele.author +', &nbsp;' + c_ele.updated_at + '</small></p>';
+					});
+				}
+
+				html = html + 			'<hr><a href="#" onclick="show_AddCommentDiv('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
+				html = html + 			'<div id="newcommentdiv' + ele.id +'" style="display:none">' ; // Add a Div that contains TextArea & Button to add a new comment
+				html = html + 				'<textarea rows="5" class="span8"></textarea>'; 
+				html = html + 				'<br>';
+				html = html + 				'<button onclick="addComment(' + ele.id + ')" class="btn btn-primary">Add Comment</button>&nbsp; &nbsp; ';
+				html = html + 				'<button onclick="hide_addCommentDiv(' + ele.id + ');" class="btn btn-danger">Cancel</button>' ;
+				html = html + 			'</div>' ; 
+				html = html + '</div>';
+				jQuery('#middle_column').append(html);
+			});
+
+			
 		}
 
 	}
