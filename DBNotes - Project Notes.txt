@@ -1,0 +1,114 @@
+Topics to cover in project:
+
+( ) -Sign In/Sign Out
+( ) -Validations (model, client side, controller)
+( ) -RSpec & Capybara (or anyother rails testing framework)
+(x) -Git  	
+(x) -Routing 
+(x) -ActiveRecord
+(x) -JSP tag equivalent
+(x) -db migration
+(x) -Bootstrap(if possible)
+( ) -Saas
+
+
+------------------------------------------------------------------------------------------------------------
+Rails "generate" commands :
+
+rails generate model note table_name:string column_name:string note_text:text author:string 
+
+rails generate model comment note_id:integer comment_text:text author:string
+
+------------------------------------------------------------------------------------------------------------
+
+Have to add "has_many", "belongs_to" to the Model definitions
+
+------------------------------------------------------------------------------------------------------------
+
+Have to use "rails console" to then test if these models are working properly....Perhaps Scaffolding can also be used to test these models...
+------------------------------------------------------------------------------------------------------------
+
+A NOTE can have multiple COMMENTs. 
+To add a COMMENT to a NOTE - 
+	- first of all, the COMMENT should have a NOTE_ID field in the backing-database-table  
+	- to add the COMMENT to the NOTE, there seem to be 2 ways - 
+		- specify the NOTE_ID correctly when creating the COMMENT
+		- or, do not specify the NOTE_ID while creating the comment, but add the newly created COMMENT to the 'comments' collection of NOTE as follows - 
+			c1 = Comment.create (author:'Jack', comment_text:'great note')
+			Note.find(1).comments << c1
+
+------------------------------------------------------------------------------------------------------------
+Figure out if there will be a difference in the Columns-List if retrieved from Models as opposed to retrieving from Tables...
+
+http://railsforum.com/viewtopic.php?id=41382
+
+
+	Note.inspect, Comment.inspect - 
+	- these "inspect" command lists all of the attributes of the model
+	- also includes "id", "created_at", "updated_at" 
+
+	Looks like the below line will give us the required info - 
+	 ActiveRecord::Base.send(:subclasses).to_s
+
+
+------------------------------------------------------------------------------------------------------------
+http://stackoverflow.com/questions/516579/is-there-a-way-to-get-a-collection-of-all-the-models-in-your-rails-app
+
+It looks like the Models have to be 'touched' or have to be 'eagerly loaded' for them to be returned via ActiveRecord::Base.descendants
+
+------------------------------------------------------------------------------------------------------------
+
+Next question - how to get attributes in a model ?
+
+	- got this via .column_names
+
+------------------------------------------------------------------------------------------------------------
+
+
+Have to check if updated_at field gets a value when a new record is created
+
+-- Yes, updated_at & created_at fields are the same for a new record
+
+------------------------------------------------------------------------------------------------------------
+
+Next question is - how to enable Ajax functionality
+
+-- this is working now; server-side code was very easy (small) to dump the data as JSON; client side code was done using jquery in a simple way (i.e. json data was parsed and each Note's html was constructed using concatenation) - this could be improved by making use of 'templates' like TrimPath or jQUery Templates or something else - also have to see how to use Rails' client-side functionality to do accomplish the same thing - it looks like we can Partials and remote => true together to get Ajax functionality (need to find out how to do this)
+
+
+ 
+
+------------------------------------------------------------------------------------------------------------
+
+ have to - push code to GITHUB;  --> done
+ have to deploy either on HEROKU or AWS; 
+ have to try and use DIIGO NOTES to get FEEDBACK; 
+
+
+------------------------------------------------------------------------------------------------------------
+Have to work on "Add Note" & "Add Comment" 
+
+
+------------------------------------------------------------------------------------------------------------
+Have to return JSON data that includes TableName-ColumnName & Number-of-notes-for-that-Column
+	- this seems to be slightly difficult to do.. - will address it later
+------------------------------------------------------------------------------------------------------------
+
+Add Note & Add Comment functionlity - working - have to structure the Javascript code so that the code that concatenates "html" string looks clean - have rename show_AddCommentBox to show_AddCommentDiv - have to commit code locally and have to push to Github
+	- finished doing all of this; also deployed in AWS
+
+------------------------------------------------------------------------------------------------------------
+Still to do - Apr 15 Monday onwards
+
+Have to structure javascript statements that are involved in concatenation operations with 'html'
+Have to Add "Edit Note" & "Edit Comment" functionality
+Search has to be implemented
+Login has to be implemented 
+(Probably better to get the features out of the way before writing tests)
+Then , have to move to Capybara tests and RSpec
+Validations have to be added as well
+
+Guideline for writing tests:
+The videos in CodeSchool (specifically the one about Integration Testing - Level 5 in Rails Testing for Zombies) mentions that we usually need to have tests for Models and then we need to have some Integration tests (The reason given was that , Controllers and Views , ideally , should not have any logic in them)
+------------------------------------------------------------------------------------------------------------
+
