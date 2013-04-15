@@ -1,7 +1,7 @@
 <div class="row text-center">
 	<hr><h4>Header goes here </h4><hr>
 </div>
-	
+
 <div class="container">
 	
 	<div class="row"> &nbsp;</div>
@@ -22,7 +22,7 @@
 		
 		<div class="span3 accordion" id="accordion1">
 			<% @models.each do |m| %>
-				<% if !['Note', 'Comment'].include? m.to_s %>
+				<% if !['Note', 'Comment'].include? m.to_s %> <!--  Exclude "Note", "Comment" tables since they are specific to DBNotes tool-->
 				<div class="accordion-group">
 					<div class="accordion-heading">
 						<a href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1"></i><%= m %><span class="badge badge-warning pull-right">2</span></a>
@@ -97,8 +97,8 @@
 					var html = "";
 					html = html + '<div class="well">';
 					
-					html = html + 	'<p>' + ele.note_text + '</p>' ; // Use <p> element to show Note's text
-					html = html +	'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>'; // Use <p> element to show Note's author and date
+					html = html + 		'<p>' + ele.note_text + '</p>' ; // Use <p> element to show Note's text
+					html = html +		'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>'; // Use <p> element to show Note's author and date
 								
 					// If Note has Comments, create <p> element for each Comment, and append them
 					if (ele.comments.length != 0) {
@@ -108,11 +108,13 @@
 						});
 					}
 
-					html = html + '<hr><a href="#" onclick="show_AddCommentDiv('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
-					html = html + '<div id="newcommentdiv' + ele.id +'" style="display:none"><textarea rows="5" class="span8"></textarea> <br> <button onclick="addComment(' + ele.id + ')" class="btn btn-primary">Add Comment</button>';
-					html = html + 			'&nbsp; &nbsp; <button onclick="hide_addCommentDiv(' + ele.id + ');" class="btn btn-danger">Cancel</button>' ;
-					html = html + '</div>' ; // Add a Div that contains TextArea & Button to add a new comment
-
+					html = html + 			'<hr><a href="#" onclick="show_AddCommentDiv('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
+					html = html + 			'<div id="newcommentdiv' + ele.id +'" style="display:none">' ; // Add a Div that contains TextArea & Button to add a new comment
+					html = html + 				'<textarea rows="5" class="span8"></textarea>'; 
+					html = html + 				'<br>';
+					html = html + 				'<button onclick="addComment(' + ele.id + ')" class="btn btn-primary">Add Comment</button>&nbsp; &nbsp; ';
+					html = html + 				'<button onclick="hide_addCommentDiv(' + ele.id + ');" class="btn btn-danger">Cancel</button>' ;
+					html = html + 			'</div>' ; 
 					html = html + '</div>';
 					jQuery('#middle_column').append(html);
 				});
