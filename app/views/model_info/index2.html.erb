@@ -1,21 +1,20 @@
-<div class="row text-center">
-	<hr>
-	<h4> <i>Informal</i> Database Documentation </h4>
-	<h5> <i>Informal NOTEs and COMMENTs</i> - to share info about the Database</h5> 
-	<hr>
-</div>
-
+<div class="row">&nbsp;</div>
 <div class="container">
 	
-	<div class="row"> &nbsp;</div>
 	<div class="row">
-		<div class="span9">
-			<form class="form-search text-right">
-		  		<input id="search" type="text" class="input-xxlarge search-query" autocomplete="off" >
-		  		<button class="btn" onclick="search2();">Search</button>
-		  		
-			</form>
+		<div class="span3">
+			<span class="label label-info">Informal Database Documentation - </span>  <span class="label label-warning">NOTEs and COMMENTs</span> <span class="badge badge-important">to share info about the Database</span>
 		</div>
+		<div class="span6">
+				<small>Type <b>Table-name</b> or <b>Column name : </b></small> 
+		  		
+		  		<input id="search" type="text" class="input-xlarge search-query" autocomplete="off" >
+
+		  		<button class="btn btn-primary" onclick="search2();">Search</button>
+		  		
+			
+		</div>
+
 		<div class="span3 text-right">	
 			 <img width="28" height="28" alt="" src="http://l.yimg.com/dh/ap/social/profile/profile_b32.png"> Sai Ponduru
 		</div>
@@ -59,9 +58,9 @@
 			<div class="row" id="middle_column">
 				
 			</div>
-
+			
 			<div class="row" id="AddNote" class="span9">
-				<span class="label label-info pull-right"> Add New Note </div>
+				<span class="label label-info "> Add New Note </span>
 				<textarea name="newnote" id="newnote" rows="10" class="span9">(HTMLEditor goes here . For now it is a textarea.)</textarea><br>
 				<button class="btn btn-primary" type="button" onclick="javascript:addNote();">Add Note</button>
 			</div>
@@ -101,10 +100,12 @@
 			jQuery('#middle_column').html('');	// empty out the Div (i.e. initialize to empty)
 			jQuery(response).each(function(i, ele) {
 				var html = "";
+				html = html + '<span class="label label-inverse "> ' + (i+1) + ' </span>';
+				html = html + '<span class="label label-inverse pull-right"> ' +  ele.author + ' , &nbsp;' + ele.updated_at  +' </span>';
 				html = html + '<div class="well">';
 				
 				html = html + 		'<p>' + ele.note_text + '</p>' ; // Use <p> element to show Note's text
-				html = html +		'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>'; // Use <p> element to show Note's author and date
+				//html = html +		'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>'; // Use <p> element to show Note's author and date
 							
 				// If Note has Comments, create <p> element for each Comment, and append them
 				if (ele.comments.length != 0) {
@@ -123,6 +124,19 @@
 				html = html + 			'</div>' ; 
 				html = html + '</div>';
 				jQuery('#middle_column').append(html);
+			});
+
+			// Give some color to Notes & Comments & "Add Comment" link
+			jQuery('.well').each(function(i, ele) {
+				if (i%2 == 0) {
+					$(ele).addClass("badge-important");
+					$(ele).css("color","whitesmoke");
+					$(ele).find('a:contains("Add Comment")').css("color","orange").css("font-weight", "bold");
+				}
+				else {
+					$(ele).addClass("badge-warning");
+					$(ele).find('a:contains("Add Comment")').css("color","navyblue").css("font-weight", "bold");
+				}
 			});
 
 			
