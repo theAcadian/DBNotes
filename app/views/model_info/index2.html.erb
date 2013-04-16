@@ -1,5 +1,8 @@
 <div class="row text-center">
-	<hr><h4>Header goes here </h4><hr>
+	<hr>
+	<h4> <i>Informal</i> Database Documentation </h4>
+	<h5> <i>Informal NOTEs and COMMENTs</i> - to share info about the Database</h5> 
+	<hr>
 </div>
 
 <div class="container">
@@ -8,8 +11,8 @@
 	<div class="row">
 		<div class="span9">
 			<form class="form-search text-right">
-		  		<input type="text" class="input-xxlarge search-query">
-		  		<button type="submit" class="btn">Search</button>
+		  		<input id="search" type="text" class="input-xxlarge search-query" autocomplete="off" >
+		  		<button class="btn" onclick="search2();">Search</button>
 		  		
 			</form>
 		</div>
@@ -90,7 +93,7 @@
 
 		function show_notes_for_CB (response) {
 			if (response.length == 0)  {				// if no Notes are present in DB, show message and return
-				jQuery('#middle_column').html('<p><b> No notes present </b></p>');
+				jQuery('#middle_column').html('<p><b> No NOTES present for selected Column</b></p>');
 				return;
 			}
 
@@ -201,8 +204,37 @@
 
 <script type="text/javascript">
 	if (<%= @table_name.blank? %>) {
-		// jQuery('.breadcrumb').hide();
+		// Click on the 1st Table's 1st column in Accordion control
 		$('.accordion a')[0].click();
 		$('.accordion-inner a')[0].click();
 	}
 </script>
+
+<script type="text/javascript">
+	var arr = [];
+	<% @models.each do |m| %>
+		<% unless ['Note', 'Comment'].include? m.to_s %> 
+			<%	m.column_names.each do |c| %> 
+				arr.push ('<%= (m.to_s + ":" + c.to_s) %>');
+			<% end %>
+		<%end%>
+	<% end %>
+	$('#search').typeahead({source: arr});
+
+	function search2() {
+		//alert($('#search').val());
+		var table_name =  $('#search').val().split(":")[0]
+		var column_name = $('#search').val().split(":")[1]
+
+		var table_name_link = $(".accordion a:contains(" + table_name + ")"); // Find the <a> tag that contains the 'table name' as its text
+		table_name_link.click();
+
+		// To find the column-name, below search is happening within the current Table (because the same column name could be in 2 tables)
+		// The <a> tag for a column-name can be found by going to the next div of tablename's link's parent-div 
+
+		var column_name_link = table_name_link.parent().next().find("a:contains(" + column_name + ")");  
+		column_name_link.click();
+	}
+</script>
+
+
