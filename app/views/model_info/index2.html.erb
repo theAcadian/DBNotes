@@ -126,7 +126,15 @@
 				jQuery('#middle_column').append(html);
 			});
 
-			// Give some color to Notes & Comments & "Add Comment" link
+			
+			UI();
+			
+		}
+
+	}
+
+	function UI() {
+		// Give some color to Notes & Comments & "Add Comment" link
 			jQuery('.well').each(function(i, ele) {
 				if (i%2 == 0) {
 					$(ele).addClass("badge-important");
@@ -138,10 +146,6 @@
 					$(ele).find('a:contains("Add Comment")').css("color","navyblue").css("font-weight", "bold");
 				}
 			});
-
-			
-		}
-
 	}
 
 	
@@ -171,6 +175,8 @@
 
 			jQuery('#middle_column').append(html);
 			$('#newnote').val('');
+
+			UI();
 		}
 
 
@@ -210,6 +216,8 @@
 			$(html).insertAfter(last_comments_hr);	// insert new comment after the last comment's hr 
 			$('#newcommentdiv' + note_id).hide();	// hide textarea & button to add new comment
 			$('#newcommentdiv' + note_id + '>textarea').val('');	//clear textarea's contents
+
+			UI();
 		}
 
 	}
