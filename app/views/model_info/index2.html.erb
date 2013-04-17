@@ -1,3 +1,14 @@
+
+<style type="text/css">
+	/* This has been added below becuase the Search icon was not showing up */
+	.glyph {
+		background-image: url(/assets/glyphicons-halflings.png);
+	}
+	.glyphw {
+		background-image: url(/assets/glyphicons-halflings-white.png);
+	}
+</style>
+
 <div class="row">&nbsp;</div>
 <div class="container">
 	
@@ -10,7 +21,7 @@
 		  		
 		  		<input id="search" type="text" class="input-xlarge search-query" autocomplete="off" >
 
-		  		<button class="btn btn-primary" onclick="search2();">Search</button>
+		  		<button class="btn btn-primary" onclick="search2();"><i class="icon-search glyphw"></i> Search</button>
 		  		
 			
 		</div>
@@ -35,7 +46,7 @@
 							<ul>
 							<%	m.column_names.each do |c| %>  
 								<% unless ['id', 'created_at', 'updated_at'].include? c %>
-									<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');"><%= c %></a> <span class="badge badge-info pull-right">2</span></li>
+									<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');add_selected_icon(this);"><%= c %></a> <span class="badge badge-info pull-right">2</span></li>
 								<% end %>
 							<% end %>
 							</ul>
@@ -77,6 +88,11 @@
 
 <script type="text/javascript">
 
+	function add_selected_icon(selected_link) {
+		$('.icon-ok').remove();	// Remove icon from previously selected link
+		$(selected_link).append('<i class="icon-ok glyph"></i>'); // Add icon to currently selected link
+	}
+
 	function update_breadcrumbs(model_name, column_name) {
 		jQuery('.breadcrumb').show();
 		jQuery('#table_name').html('<span class="divider">></span>' + model_name);
@@ -92,7 +108,7 @@
 
 		function show_notes_for_CB (response) {
 			if (response.length == 0)  {				// if no Notes are present in DB, show message and return
-				jQuery('#middle_column').html('<p><b> No NOTES present for selected Column</b></p>');
+				jQuery('#middle_column').html('<h3 class="text-center"> No NOTES present for selected Column</h3><br>');
 				return;
 			}
 
