@@ -22,8 +22,6 @@
 		  		<input id="search" type="text" class="input-xlarge search-query" autocomplete="off" >
 
 		  		<button class="btn btn-primary" onclick="search2();"><i class="icon-search glyphw"></i> Search</button>
-		  		
-			
 		</div>
 
 		<div class="span3 text-right">	
@@ -127,7 +125,7 @@
 				if (ele.comments.length != 0) {
 					jQuery(ele.comments).each( function(i, c_ele) {
 						html = html + '<hr>' ; 
-						html = html + '<p> <small>' + c_ele.comment_text + ' &nbsp;&nbsp;- ' + c_ele.author +', &nbsp;' + c_ele.updated_at + '</small></p>';
+						html = html + '<p style="font-size:x-small">' + c_ele.comment_text + ' &nbsp;&nbsp;- ' + c_ele.author +', &nbsp;' + c_ele.updated_at + '</p>';
 					});
 				}
 
@@ -224,7 +222,7 @@
 			
 			// construct html for the new comment to be appended 
 			var html = "";	
-			html = html + '<p> <small>' + ele.comment_text + ' &nbsp;&nbsp;- ' + ele.author +', &nbsp;' + ele.updated_at + '</small></p>';
+			html = html + '<p style="font-size:x-small">' + ele.comment_text + ' &nbsp;&nbsp;- ' + ele.author +', &nbsp;' + ele.updated_at + '</p>';
 			html = html + '<hr>' ;
 			
 			// append the above constructed html 
@@ -263,8 +261,8 @@
 
 	function search2() {
 		//alert($('#search').val());
-		var table_name =  $('#search').val().split(":")[0]
-		var column_name = $('#search').val().split(":")[1]
+		var table_name =  $('#search').val().split(":")[0] ;
+		var column_name = $('#search').val().split(":")[1] ;
 
 		var table_name_link = $(".accordion a:contains(" + table_name + ")"); // Find the <a> tag that contains the 'table name' as its text
 		table_name_link.click();
