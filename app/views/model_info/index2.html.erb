@@ -172,6 +172,11 @@
 		jQuery.getJSON('/add_note?table_name=' + table_name + '&column_name=' + column_name + '&author=' + author + '&note_text=' + note_text, addNote_CB);
 
 		function addNote_CB (response) {
+			if (response == "not logged in") {
+				show_login_dialog();
+				return ;
+			}
+
 			var ele = response;
 			//var ele = {"author":"Sai Ponduru","column_name":"note_id","created_at":"2013-04-11T04:55:40Z","id":37,"note_text":"s","table_name":"Comment","updated_at":"2013-04-11T04:55:40Z"};
 			var html = "";
@@ -217,6 +222,11 @@
 		jQuery.getJSON('/add_comment?author=' + author + '&note_id=' + note_id + '&comment_text=' + comment_text, addComment_CB);
 
 		function addComment_CB  (response) {
+			if (response == "not logged in") {
+				show_login_dialog();
+				return ;
+			}
+
 			// response contains json data of newly added comment - we are using data received from the server (instead of taking it from the textarea element) in order to make sure that the comment got saved on the server side ;
 			var ele = response;
 			
@@ -235,6 +245,8 @@
 		}
 
 	}
+
+
 	
 </script>
 
@@ -273,6 +285,28 @@
 		var column_name_link = table_name_link.parent().next().find("a:contains(" + column_name + ")");  
 		column_name_link.click();
 	}
+</script>
+
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Login using JIRA credentials</h3>
+  </div>
+  <div class="modal-body">
+    <p></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" onclick="javascript:authenticate_with_Jira();">Login</button>
+  </div>
+</div>
+
+<script type="text/javascript">
+	function show_login_dialog() {
+		$('#myModal').modal('show');
+	}
+	
 </script>
 
 
