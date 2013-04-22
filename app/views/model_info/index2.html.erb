@@ -294,17 +294,43 @@
     <h3 id="myModalLabel">Login using JIRA credentials</h3>
   </div>
   <div class="modal-body">
-    <p></p>
+  	
+    <label for="username"> Username: </label><input type="text" id="username" name="username"/><br>
+	<label for="password"> Password: </label><input type="password" id="password" name="password"/><br>
+	<div class="pull-left">
+	    <button class="btn btn-primary" onclick="javascript:authenticate_with_Jira();">Login</button>
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
   </div>
+  
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary" onclick="javascript:authenticate_with_Jira();">Login</button>
+  	<p id="login_feedback" class="text-center">To add a Note / Comment, you have to login.</p>
   </div>
 </div>
 
 <script type="text/javascript">
 	function show_login_dialog() {
 		$('#myModal').modal('show');
+	}
+
+	function authenticate_with_Jira() {
+
+		// send ajax request to ModelInfo#jira
+		// if unsuccessful, update #login_feedback to say - "Tried authenticating with - https://jira2.icentris.com/jira/rest/api/2/user?username=" + username ....Login unsuccessful.. "
+		var username = $('#username').val();
+		var password = $('#password').val();
+		$.getJSON('/user_authenticate?username=' + username + '&password=' + password, authenticate_with_Jira_CB );
+
+		function authenticate_with_Jira_CB(response) {
+			$('#login_feedback').html(response);
+			if (response.indexOf("Successful") >= 0) {
+				 $('#username').val('');
+				 $('#password').val('');
+				 $('#myModal').modal('hide');
+			}
+
+		}
+
 	}
 	
 </script>

@@ -16,6 +16,8 @@ match 'add_comment', to: "ModelInfo#add_comment"
 
 match 'get_login_status', to: "ModelInfo#user_logged_in"
 
+match 'user_authenticate', to: "ModelInfo#user_authenticate"
+
 resources :notes do
   resources :comments
 end

@@ -101,5 +101,18 @@ class ModelInfoController < ApplicationController
   		end
   	end
 
+  	def user_authenticate
+  		username = params[:username]
+  		password = params[:password]
+  		jira_response = jira(username, password)
+  		@s = jira_response
+  		if jira_response.include? "username="
+  			session[:username] = jira_response.split('"displayName":')[1].split(",")[0]
+  			render :json => "Authentication Successful".to_json
+  		else 
+  			render :json => "Authentication Failed".to_json 
+  		end 
+  	end
+
 
 end
