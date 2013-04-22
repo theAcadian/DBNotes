@@ -18,6 +18,10 @@ match 'get_login_status', to: "ModelInfo#user_logged_in"
 
 match 'user_authenticate', to: "ModelInfo#user_authenticate"
 
+match 'is_user_logged_in', to: "ModelInfo#is_user_logged_in"
+
+match 'get_author_name', to: "ModelInfo#get_author_name"
+
 resources :notes do
   resources :comments
 end

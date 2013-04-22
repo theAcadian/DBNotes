@@ -25,7 +25,7 @@
 		</div>
 
 		<div class="span3 text-right">	
-			 <img width="28" height="28" alt="" src="http://l.yimg.com/dh/ap/social/profile/profile_b32.png"> Sai Ponduru
+			 <img width="28" height="28" alt="" src="http://l.yimg.com/dh/ap/social/profile/profile_b32.png"> <span id="user_full_name" class="text-warning"> Anonymous User </span>
 		</div>
 
 	</div>
@@ -165,9 +165,18 @@
 	
 	function addNote() {
 
+		var user_logged_in = get_login_status();
+
+		if (!user_logged_in) {
+			show_login_dialog();
+			return ;
+		}
+
+
 		var table_name = $('li#table_name').text().substr(1) ;	// Get TableName (strip off the last character which is > )
 		var column_name = $('li#column_name').text().substr(1) ;
-		var author = 'Sai Ponduru';
+		//var author = 'Sai Ponduru';
+		author = get_author_name();
 		var note_text = $('#newnote').val();
 		jQuery.getJSON('/add_note?table_name=' + table_name + '&column_name=' + column_name + '&author=' + author + '&note_text=' + note_text, addNote_CB);
 
@@ -217,7 +226,16 @@
 
 	function addComment( note_id) {
 
-		var author = 'Sai Ponduru';
+		var user_logged_in = get_login_status();
+
+		if (!user_logged_in) {
+			show_login_dialog();
+			return ;
+		}
+
+		author = get_author_name();
+
+		//var author = 'Sai Ponduru';
 		var comment_text = $('#newcommentdiv' + note_id + '> textarea').val();
 		jQuery.getJSON('/add_comment?author=' + author + '&note_id=' + note_id + '&comment_text=' + comment_text, addComment_CB);
 
@@ -244,6 +262,32 @@
 			UI();
 		}
 
+	}
+
+	function get_login_status() {
+		var user_logged_in = false;
+		//jQuery.getJSON('/is_user_logged_in', function(response){ user_logged_in = response; alert(response);});
+		$.ajax({
+			url: '/is_user_logged_in', 
+			dataType: 'json',
+			async: false,
+			success: function(response){ user_logged_in = response; }
+		});
+		return user_logged_in;
+	}
+
+	function get_author_name() {
+		author = "Anonymous User";
+		//if (get_login_status()) {
+			//jQuery.getJSON('/get_author_name', function(response){ author = response.replace(/"/g,''); });
+			$.ajax({
+				url: '/get_author_name',
+				dataType: 'json',
+				async: false,
+				success:  function(response){ author = response.replace(/"/g,''); }
+			});
+		//}
+		return author;
 	}
 
 
@@ -309,6 +353,7 @@
 </div>
 
 <script type="text/javascript">
+	
 	function show_login_dialog() {
 		$('#myModal').modal('show');
 	}
@@ -320,13 +365,17 @@
 		var username = $('#username').val();
 		var password = $('#password').val();
 		$.getJSON('/user_authenticate?username=' + username + '&password=' + password, authenticate_with_Jira_CB );
+		$('#login_feedback').html("<p class='text-info'>Authentication in progress ...</p>");
 
 		function authenticate_with_Jira_CB(response) {
-			$('#login_feedback').html(response);
-			if (response.indexOf("Successful") >= 0) {
-				 $('#username').val('');
-				 $('#password').val('');
-				 $('#myModal').modal('hide');
+			
+			if (response.indexOf("Authentication Failed") >= 0)
+				$('#login_feedback').html("<p class='text-warning'>"  + response + " </p><b> Please try again.</b>");
+			else  {
+				 $('#login_feedback').html("<p class='text-success'> Login Successful!. </p><br> <p class='text-warning'> Click 'Add Note/Comment' again </p>");
+				 setTimeout("$('#username').val(''); $('#password').val(''); $('#myModal').modal('hide');", 3000);
+				 author = get_author_name();
+				 $('#user_full_name').html(author);
 			}
 
 		}

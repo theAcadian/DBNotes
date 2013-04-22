@@ -21,6 +21,7 @@ class ModelInfoController < ApplicationController
 	def index2
 		Rails.application.eager_load!
 		@models = ActiveRecord::Base.descendants
+		session[:username] = nil
 	end
 
 	#
@@ -35,7 +36,6 @@ class ModelInfoController < ApplicationController
 		@table_name = params[:table]
 		@column_name = params[:column]
 		@notes = Note.where(:table_name => @table_name, :column_name => @column_name)
-
 
 		respond_to do |format|
 			format.json { render :json => @notes.to_json(:include => :comments) }
@@ -84,6 +84,7 @@ class ModelInfoController < ApplicationController
 	    return @jira_response.body
 	end
 
+	# THis function is not being used at present..
   	def user_exists? (username, password)
 	  	# Below is the message returned when "Not already Authenticated in Jira"
 	  	# {"errorMessages":["You are not authenticated. Authentication required to perform this operation."],"errors":{}}
@@ -101,17 +102,26 @@ class ModelInfoController < ApplicationController
   		end
   	end
 
+  	def is_user_logged_in
+  		logged_in_status = !session[:username].blank?
+  		render :json => logged_in_status.to_json
+  	end 
+
   	def user_authenticate
   		username = params[:username]
   		password = params[:password]
   		jira_response = jira(username, password)
-  		@s = jira_response
   		if jira_response.include? "username="
   			session[:username] = jira_response.split('"displayName":')[1].split(",")[0]
-  			render :json => "Authentication Successful".to_json
+  			render :json => "Authentication Successful".to_json	# send back user's full name if authentication is successful
   		else 
-  			render :json => "Authentication Failed".to_json 
+  			session[:username] = nil
+  			render :json => "Authentication Failed".to_json # send back "Authentication Failed" if authentication has failed
   		end 
+  	end
+
+  	def get_author_name
+  		render :json => session[:username].to_json
   	end
 
 
