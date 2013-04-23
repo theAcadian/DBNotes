@@ -36,7 +36,7 @@
 				<% if !['Note', 'Comment'].include? m.to_s %> <!--  Exclude "Note", "Comment" tables since they are specific to DBNotes tool-->
 				<div class="accordion-group">
 					<div class="accordion-heading">
-						<a href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1"></i><%= m %><span class="badge badge-warning pull-right">2</span></a>
+						<a href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1"></i><%= m %><span class="badge badge-warning pull-right" id="<%= m %>_note_count">0</span></a>
 						
 					</div>
 					<div id="collapse<%= m%>" class="accordion-body collapse">
@@ -44,7 +44,7 @@
 							<ul>
 							<%	m.column_names.each do |c| %>  
 								<% unless ['id', 'created_at', 'updated_at'].include? c %>
-									<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');add_selected_icon(this);"><%= c %></a> <span class="badge badge-info pull-right">2</span></li>
+									<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');add_selected_icon(this);"><%= c %></a> <span class="badge badge-info pull-right" id="<%= m %>_<%= c %>_note_count">0</span></li>
 								<% end %>
 							<% end %>
 							</ul>
@@ -205,6 +205,7 @@
 			$('#newnote').val('');
 
 			UI();
+			update_note_count();
 		}
 
 
@@ -260,6 +261,7 @@
 			$('#newcommentdiv' + note_id + '>textarea').val('');	//clear textarea's contents
 
 			UI();
+			update_note_count();
 		}
 
 	}
@@ -382,6 +384,42 @@
 
 	}
 	
+</script>
+
+
+<script type="text/javascript">
+
+	function update_note_count() {
+		
+		$.getJSON('/get_table_notes_count', function(response){
+			/* Example JSON response from server :
+			[{"note_count":2,"table_name":null},{"note_count":46,"table_name":"Comment"},{"note_count":4,"table_name":"Note"},{"note_count":21,"table_name":"Table1"},{"note_count":2,"table_name":"Table2"}]
+			*/
+			$(response).each(function() {
+				var table_name = this.table_name;
+				var note_count = this.note_count;
+				$('#' + table_name + '_note_count').html(note_count);
+			});
+		});
+
+		//$.getJSON('/get_table_notes_count', function(response){
+		$.getJSON('/get_column_notes_count', function(response){
+			/* Example JSON response from server :
+			[{"column_name":null,"note_count":2,"table_name":null},{"column_name":"author","note_count":11,"table_name":"Comment"},{"column_name":"comment_text","note_count":5,"table_name":"Comment"},{"column_name":"note_id","note_count":30,"table_name":"Comment"},{"column_name":"author","note_count":2,"table_name":"Note"},{"column_name":"table_name","note_count":2,"table_name":"Note"},{"column_name":"col1","note_count":15,"table_name":"Table1"},{"column_name":"col2","note_count":2,"table_name":"Table1"},{"column_name":"col3","note_count":2,"table_name":"Table1"},{"column_name":"col4","note_count":2,"table_name":"Table1"},{"column_name":"col1","note_count":2,"table_name":"Table2"}]
+			*/
+			$(response).each(function() {
+				var table_name = this.table_name;
+				var column_name = this.column_name;
+				var note_count = this.note_count;
+				$('#' + table_name + '_' + column_name + '_note_count').html(note_count);
+			});
+		});
+
+	}
+
+	update_note_count();
+
+
 </script>
 
 

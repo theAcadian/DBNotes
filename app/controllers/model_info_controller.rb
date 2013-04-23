@@ -120,8 +120,32 @@ class ModelInfoController < ApplicationController
   		end 
   	end
 
+
   	def get_author_name
   		render :json => session[:username].to_json
+  	end
+
+
+  	
+  	# This will be called on page-load via Ajax
+  	def get_table_notes_count
+  		# write code to that outputs some json 
+  		# 		{"table1": 21, "table2": 2,.....}
+  		render :json => Note.find_by_sql("select table_name, count(*) as note_count from Notes group by table_name").to_json
+  	end
+
+
+  	
+  	# This will be called when user clicks on a particular table-name in the Accordion control
+  	def get_column_notes_count_within_a_table (table_name)
+  		# write code that outputs some json
+  		#		{"col1": 10, "col2": 5, "col3": 3,......}
+  		render :json => Note.find_by_sql("select table_name, column_name, count(*) as note_count from Notes where table_name = ? group by table_name, column_name", table_name).to_json
+  	end
+
+
+  	def get_column_notes_count()
+  		render :json => Note.find_by_sql("select table_name, column_name, count(*) as note_count from Notes group by table_name, column_name").to_json
   	end
 
 
