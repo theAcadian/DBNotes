@@ -38,7 +38,6 @@
 				<div class="accordion-group">
 					<div class="accordion-heading">
 						<a class="text-info" href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1">&nbsp;<%= m %>&nbsp;<span class="caret" style="vertical-align: baseline"></span><span class="badge badge-warning pull-right" style="margin-right:15px" id="<%= m %>_note_count">0</span></a>
-						
 					</div>
 					<div id="collapse<%= m%>" class="accordion-body collapse">
 						<div class="accordion-inner">
@@ -302,6 +301,9 @@
 
 	function search2() {
 		//alert($('#search').val());
+		reset_accordion();
+		setTimeout("",2000);
+
 		var table_name =  $('#search').val().split(":")[0] ;
 		var column_name = $('#search').val().split(":")[1] ;
 
@@ -403,6 +405,13 @@
 	update_note_count();
 
 
+</script>
+
+<script type="text/javascript">
+	function reset_accordion() {
+		// collapse all 'tables' that are expanded
+		$('div[class*=collapse][class*=in][class*=accordion-body]').parent().find('div.accordion-heading a').click();
+	}
 </script>
 
 
