@@ -335,7 +335,7 @@
   </div>
   
   <div class="modal-footer">
-  	<p id="login_feedback" class="text-center">To add a Note / Comment, you have to login.</p>
+  	<p id="login_feedback" class="text-center" style="font-size:1.4em">To add a Note / Comment, you have to login.</p>
   </div>
 </div>
 
@@ -359,7 +359,7 @@
 			if (response.indexOf("Authentication Failed") >= 0)
 				$('#login_feedback').html("<p class='text-warning'>"  + response + " </p><b> Please try again.</b>");
 			else  {
-				 $('#login_feedback').html("<p class='text-success'> Login Successful!. </p><br> <p class='text-warning'> Click 'Add Note/Comment' again </p>");
+				 $('#login_feedback').html("<p class='text-success'> Login Successful!. </p> <p class='text-warning'> Click 'Add Note/Comment' again </p>");
 				 setTimeout("$('#username').val(''); $('#password').val(''); $('#myModal').modal('hide');", 3000);
 				 author = get_author_name();
 				 $('#user_full_name').html(author);
