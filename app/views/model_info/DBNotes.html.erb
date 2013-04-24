@@ -54,9 +54,9 @@
 				<% end %>
 			<% end %>
 		</div>
-		<div class="span9">
+		<div class="span9" >
 			
-			<div class="row">
+			<div class="row" style="padding-left:5px">
 				<ul class="breadcrumb" style="font-weight:bold; background-color:lightgoldenrodyellow">
 				  <li><%= link_to "HOME", :root %></li>
 				  <li id="table_name"> </li>
@@ -64,7 +64,7 @@
 				</ul>
 			</div>
 			
-			<div class="row" id="middle_column">
+			<div class="row" id="middle_column" style="padding-left:5px">
 				
 			</div>
 			
@@ -113,8 +113,8 @@
 			
 			jQuery('#middle_column').html('');	// empty out the Div (i.e. initialize to empty)
 			jQuery(response).each(function(i, ele) {
-				var html = "";
-				html = html + '<span class="label label-inverse "> ' + (i+1) + ' </span>';
+				var html = "&nbsp;";
+				html = html + '<span class="label label-inverse "> &nbsp;&nbsp;' + (i+1) + '&nbsp;&nbsp; </span>';
 				html = html + '<span class="label label-inverse pull-right"> ' +  ele.author + ' , &nbsp;' + ele.updated_at  +' </span>';
 				html = html + '<div class="well">';
 				
