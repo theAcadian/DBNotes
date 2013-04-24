@@ -45,7 +45,7 @@
 							<ul>
 							<%	m.column_names.each do |c| %>  
 								<% unless ['id', 'created_at', 'updated_at'].include? c %>
-									<li><a class="text-success" href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');add_selected_icon(this);"><%= c %></a> <span class="badge badge-info pull-right" id="<%= m %>_<%= c %>_note_count">0</span></li>
+									<li><a id="<%= m %>_<%= c %>_link" class="text-success" href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');add_selected_icon(this);"><%= c %></a> <span class="badge badge-info pull-right" id="<%= m %>_<%= c %>_note_count">0</span></li>
 								<% end %>
 							<% end %>
 							</ul>
@@ -189,28 +189,10 @@
 
 			var ele = response;
 			//var ele = {"author":"Sai Ponduru","column_name":"note_id","created_at":"2013-04-11T04:55:40Z","id":37,"note_text":"s","table_name":"Comment","updated_at":"2013-04-11T04:55:40Z"};
-			var html = "";
-			html = html + '<div class="well">';
-			html = html + 		'<p>' + ele.note_text + '</p>' ;
-			html = html +		'<p class="text-right"><small> - ' + ele.author + ' , &nbsp;' + ele.updated_at  + '</small></p>';
-			html = html + 		'<hr><a href="#" onclick="show_AddCommentDiv('+ ele.id + ');return false;"><small>Add Comment</small></a>'; // for "Add Comment" link
-			html = html + 		'<div id="newcommentdiv' + ele.id +'" style="display:none">';
-			html = html + 			'<textarea rows="5" class="span8"></textarea> <br>' ;
-			html = html + 			'<button onclick="addComment(' + ele.id + ')" class="btn btn-primary">Add Comment</button>' ;
-			html = html + 			'&nbsp; &nbsp; <button onclick="hide_addCommentDiv(' + ele.id + ');" class="btn btn-danger">Cancel</button>' ;
-			html = html + 		'</div>' ; // Add a Div that contains TextArea & Button to add a new comment
-					
-			html = html + '</div>';
-
-			jQuery('#middle_column').append(html);
 			$('#newnote').val('');
-
-			UI();
+			$('#' + ele.table_name + "_" + ele.column_name + "_link").click();
 			update_note_count();
 		}
-
-
-		
 	}
 
 
