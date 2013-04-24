@@ -29,6 +29,7 @@
 		</div>
 
 	</div>
+	<div class="row">&nbsp;</div>
 	<div class="row" >
 		
 		<div class="span3 accordion" id="accordion1">
@@ -36,7 +37,7 @@
 				<% if !['Note', 'Comment'].include? m.to_s %> <!--  Exclude "Note", "Comment" tables since they are specific to DBNotes tool-->
 				<div class="accordion-group">
 					<div class="accordion-heading">
-						<a href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1"></i><%= m %><span class="badge badge-warning pull-right" id="<%= m %>_note_count">0</span></a>
+						<a class="text-info" href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1">&nbsp;<%= m %>&nbsp;<span class="caret" style="vertical-align: baseline"></span><span class="badge badge-warning pull-right" style="margin-right:3px" id="<%= m %>_note_count">0</span></a>
 						
 					</div>
 					<div id="collapse<%= m%>" class="accordion-body collapse">
@@ -44,7 +45,7 @@
 							<ul>
 							<%	m.column_names.each do |c| %>  
 								<% unless ['id', 'created_at', 'updated_at'].include? c %>
-									<li><a href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');add_selected_icon(this);"><%= c %></a> <span class="badge badge-info pull-right" id="<%= m %>_<%= c %>_note_count">0</span></li>
+									<li><a class="text-success" href="#" onclick="update_breadcrumbs('<%= m %>', '<%= c %>');show_notes_for('<%= m %>', '<%= c %>');add_selected_icon(this);"><%= c %></a> <span class="badge badge-info pull-right" id="<%= m %>_<%= c %>_note_count">0</span></li>
 								<% end %>
 							<% end %>
 							</ul>

@@ -1,6 +1,6 @@
 class ModelInfoController < ApplicationController
 
-	before_filter :get_models_info
+	#before_filter :get_models_info
 
 	before_filter :user_logged_in, :only => [:add_note, :add_comment]
 
