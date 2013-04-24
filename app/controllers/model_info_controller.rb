@@ -18,7 +18,7 @@ class ModelInfoController < ApplicationController
 	end
 
 
-	def index
+	def DBNotes
 		Rails.application.eager_load!
 		@models = ActiveRecord::Base.descendants
 		session[:username] = nil

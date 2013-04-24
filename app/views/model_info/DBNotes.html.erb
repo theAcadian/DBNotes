@@ -37,7 +37,7 @@
 				<% if !['Note', 'Comment'].include? m.to_s %> <!--  Exclude "Note", "Comment" tables since they are specific to DBNotes tool-->
 				<div class="accordion-group">
 					<div class="accordion-heading">
-						<a class="text-info" href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1">&nbsp;<%= m %>&nbsp;<span class="caret" style="vertical-align: baseline"></span><span class="badge badge-warning pull-right" style="margin-right:3px" id="<%= m %>_note_count">0</span></a>
+						<a class="text-info" href="#collapse<%= m%>" class="accordion-toggle" data-toggle="collapse" data-parent="accordion1">&nbsp;<%= m %>&nbsp;<span class="caret" style="vertical-align: baseline"></span><span class="badge badge-warning pull-right" style="margin-right:15px" id="<%= m %>_note_count">0</span></a>
 						
 					</div>
 					<div id="collapse<%= m%>" class="accordion-body collapse">

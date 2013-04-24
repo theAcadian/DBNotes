@@ -1,7 +1,7 @@
 DBNotes::Application.routes.draw do
 
 #match 'modeldata', to: "ModelInfo#index"
-root  to: "ModelInfo#index"
+match 'DBNotes',  to: "ModelInfo#DBNotes"
 
 # If user clicks on Table-name, display all notes of all columns (for now)
 # This will probably change to just display some info about the Table
