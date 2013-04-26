@@ -2,7 +2,7 @@ class ModelInfoController < ApplicationController
 
 	#before_filter :get_models_info
 
-	require 'IcentrisJira'
+	
 
 	before_filter :user_logged_in, :only => [:add_note, :add_comment]
 
@@ -50,7 +50,7 @@ class ModelInfoController < ApplicationController
 	  	!(IcentrisJira::get_user_info(username, password).include? "not authenticated")
   	end
 	DOC
-	
+
   	# This is called in before_filter for add_note() & add_comment()
   	def user_logged_in
   		if session[:username].blank? 
@@ -77,6 +77,7 @@ class ModelInfoController < ApplicationController
 	end
 	DOC
 
+	require 'IcentrisJira'
   	def user_authenticate
   		username = params[:username]
   		password = params[:password]
