@@ -2,6 +2,8 @@ class ModelInfoController < ApplicationController
 
 	#before_filter :get_models_info
 
+	require 'IcentrisJira'
+
 	before_filter :user_logged_in, :only => [:add_note, :add_comment]
 
 	def get_models_info
@@ -69,29 +71,16 @@ class ModelInfoController < ApplicationController
 	################################################################################################
 	#  									Authentication using Jira REST Api
 	################################################################################################	
-	require 'net/http'
 
-    def jira(username, password)
-	  	#uri = URI.parse("https://jira2.icentris.com/jira/rest/auth/1/session/")
-	  	uri = URI.parse("https://jira2.icentris.com/jira/rest/api/2/user?username=" + username)
-	    http = Net::HTTP.new(uri.host, uri.port)
-	    http.use_ssl = true
-	    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-	    request = Net::HTTP::Get.new(uri.request_uri)
-	    request.basic_auth username, password 
-		request["Content-Type"] = "application/json"
-	    @jira_response = http.request(request)
-	    return @jira_response.body
-	end
-
-	# THis function is not being used at present..
+    # THis function is not being used at present..
   	def user_exists? (username, password)
 	  	# Below is the message returned when "Not already Authenticated in Jira"
 	  	# {"errorMessages":["You are not authenticated. Authentication required to perform this operation."],"errors":{}}
 
 	  	# Below is the message returned when "Already Authenticated in Jira"
 	  	# {"self":"https://jira2.icentris.com/jira/rest/api/latest/user?username=jyothiprasad.ponduru","name":"jyothiprasad.ponduru","loginInfo":{"failedLoginCount":15,"loginCount":278,"lastFailedLoginTime":"2013-04-18T05:49:07.054-0600","previousLoginTime":"2013-04-18T22:19:09.290-0600"}}
-	  	!(jira(username, password).include? "not authenticated")
+	  	#!(jira(username, password).include? "not authenticated")
+	  	!(IcentrisJira::get_user_info(username, password).include? "not authenticated")
   	end
 
   	def user_logged_in
@@ -107,10 +96,12 @@ class ModelInfoController < ApplicationController
   		render :json => logged_in_status.to_json
   	end 
 
+
   	def user_authenticate
   		username = params[:username]
   		password = params[:password]
-  		jira_response = jira(username, password)
+  		#jira_response = jira(username, password)
+  		jira_response = IcentrisJira::get_user_info(username, password)
   		if jira_response.include? "username="
   			session[:username] = jira_response.split('"displayName":')[1].split(",")[0]
   			render :json => "Authentication Successful".to_json	# send back user's full name if authentication is successful
