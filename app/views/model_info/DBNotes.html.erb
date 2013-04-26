@@ -58,7 +58,7 @@
 			
 			<div class="row" style="padding-left:5px">
 				<ul class="breadcrumb" style="font-weight:bold; background-color:lightgoldenrodyellow">
-				  <li><%= link_to "HOME", :root %></li>
+				  <li><%= link_to "HOME", '/DBNotes' %></li>
 				  <li id="table_name"> </li>
 				  <li id="column_name" class="active"></li>
 				</ul>
@@ -300,7 +300,6 @@
 	$('#search').typeahead({source: arr});
 
 	function search2() {
-		//alert($('#search').val());
 		reset_accordion();
 		setTimeout("",2000);
 
